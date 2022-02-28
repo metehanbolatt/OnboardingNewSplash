@@ -16,14 +16,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.*
+import com.metehanbolat.onboardingnewsplash.navigation.Screen
 import com.metehanbolat.onboardingnewsplash.util.OnBoardingPage
+import com.metehanbolat.onboardingnewsplash.viewmodel.WelcomeViewModel
 
+@ExperimentalAnimationApi
+@ExperimentalPagerApi
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun WelcomeScreen(
+    navController: NavHostController,
+    welcomeViewModel: WelcomeViewModel = hiltViewModel()
+) {
+    val pages = listOf(
+        OnBoardingPage.First,
+        OnBoardingPage.Second,
+        OnBoardingPage.Third,
+    )
     
+    val pagerState = rememberPagerState()
+    
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        HorizontalPager(
+            modifier = Modifier.weight(10f),
+            count = 3,
+            state = pagerState,
+            verticalAlignment = Alignment.Top
+        ) { position ->
+            PagerScreen(onBoardingPage = pages[position])
+        }
+        HorizontalPagerIndicator(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .weight(1f),
+            pagerState = pagerState
+        )
+        FinishButton(
+            modifier = Modifier.weight(1f),
+            pagerState = pagerState
+        ) {
+            welcomeViewModel.saveOnBoardingState(completed = true)
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
+        }
+    }
 }
 
 @Composable
