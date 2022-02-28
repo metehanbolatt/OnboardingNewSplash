@@ -12,8 +12,11 @@ import com.metehanbolat.onboardingnewsplash.screen.WelcomeScreen
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
-fun SetupNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Welcome.route) {
+fun SetupNavGraph(
+    navController: NavHostController,
+    startDestination: String
+) {
+    NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screen.Welcome.route) {
             WelcomeScreen(navController = navController)
         }
